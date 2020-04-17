@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "assumeChangesOnlyAffectDirectDependencies": true,
+    "incremental": true,
+    "target": "es2017",
+    "outDir": "dist",
+    "strict": true
+  },
+  "compileOnSave": true
+}
