@@ -27,12 +27,12 @@ type Listing = {
   children: { data: Post }[]
 }
 
-type Post = {
-  id: string;
-  title: string;
-  author: string;
-  created_utc: number;
-  subreddit: string;
+export class Post {
+  id!: string;
+  title!: string;
+  author!: string;
+  created_utc!: number;
+  subreddit!: string;
 
   post_hint: undefined
     | 'link'
@@ -42,17 +42,17 @@ type Post = {
     | 'self';
 
   // Text post
-  selftext: string;
+  selftext!: string;
 
   // Image and link posts
   preview: Preview | undefined;
-  url: string;
-  thumbnail: string;
-  domain: string;
+  url!: string;
+  thumbnail!: string;
+  domain!: string;
 }
 
 type Preview = {
-  images: { source: Source; resolutions: Source[] };
+  images: { source: Source; resolutions: Source[] }[];
   enabled: boolean;
 }
 

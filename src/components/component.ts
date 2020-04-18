@@ -107,9 +107,11 @@ function buildElementClass<
 
       for (const data in this._data) {
         this._data[data] = <any>undefined;
-        if (typeof options.data[data] === 'object') {
-          if ('default' in options.data[data]) {
-            this._data['data']
+        const option = options.data[data];
+        if (typeof option === 'object') {
+          if ('default' in option) {
+            this._data[data] =
+              (option as ConstructorWithDefault<new () => any>).default;
           }
         }
       }
