@@ -19,45 +19,96 @@ export class Reddit {
 }
 
 
+export class Post {
+  public readonly id: string;
+  public readonly title: string; 
+  public readonly author: string;
+  public readonly createdUtc: number;
+
+  constructor(post: PostResponse) {
+    this.id = post.id;
+    this.title = post.title;
+    this.author = post.author;
+    this.createdUtc = post.created_utc;
+  }
+}
+
+export class SelfPost extends Post {
+  public readonly text: string;
+
+  constructor(post: PostResponse) {
+    super(post);
+    this.text = post.selftext;
+  }
+}
+
+export class LinkPost extends Post {
+  public readonly url: string;
+  public readonly thumbnail: string;
+  public readonly domain: string;
+
+  constructor(post: PostResponse) {
+    super(post);
+    this.url = post.url;
+    this.thumbnail = post.thumbnail;
+    this.domain = post.domain;
+  }
+}
+
+export class ImagePost extends LinkPost {
+  public readonly preview: Preview;
+
+  constructor(post: PostResponse) {
+    super(post);
+    this.preview = post.preview!;
+  }
+}
+
+
 type SubredditResponse = { data: Listing };
 
 type Listing = {
-  before: string | null;
-  after: string;
-  children: { data: Post }[]
+  readonly before: string | null;
+  readonly after: string;
+  readonly children: { readonly data: PostResponse }[]
 }
 
-export class Post {
-  id!: string;
-  title!: string;
-  author!: string;
-  created_utc!: number;
-  subreddit!: string;
+type PostHint = undefined
+| 'link'
+| 'image'
+| 'rich:video'
+| 'hosted:video'
+| 'self';
 
-  post_hint: undefined
-    | 'link'
-    | 'image'
-    | 'rich:video'
-    | 'hosted:video'
-    | 'self';
+type PostResponse = {
+  readonly id: string;
+  readonly title: string;
+  readonly author: string;
+  readonly created_utc: number;
+  readonly subreddit: string;
+
+  readonly post_hint: PostHint;
 
   // Text post
-  selftext!: string;
+  readonly selftext: string;
 
   // Image and link posts
-  preview: Preview | undefined;
-  url!: string;
-  thumbnail!: string;
-  domain!: string;
+  readonly preview: Preview | undefined;
+  readonly url: string;
+  readonly thumbnail: string;
+  readonly domain: string;
 }
 
 type Preview = {
-  images: { source: Source; resolutions: Source[] }[];
-  enabled: boolean;
+  readonly images: {
+    readonly source: Source;
+    readonly resolutions: Source[];
+  }[];
+  readonly enabled: boolean;
 }
 
 type Source = {
-  width: number;
-  height: number;
-  url: string;
+  readonly width: number;
+  readonly height: number;
+  readonly url: string;
 }

@@ -11,8 +11,6 @@
 <body>
   <main>
     <subreddit-view name="lego"></subreddit-view>
-
-    </div>
   </main>  
 </body>
 </html>
@@ -43,7 +41,7 @@
     #container {
       display: grid;
       height: 100vh;
-      grid-template-rows: 1fr 20px 1fr;
+      grid-template-rows: 12fr 1fr 9fr;
     }
 
     #hero {
@@ -77,14 +75,14 @@
       display: grid;
       grid-auto-flow: column;
       column-gap: 2px;
-      height: 100%;
       padding: 0 2px;
     }
     
     #list li {
       display: block;
       height: 100%;
-      width: 55vw;
+      height: calc(45vh);
+      width: calc(45vw);
     }
   </style>
 </template>
@@ -93,15 +91,14 @@
 <!-- Card Template -->
 
 <template id="card-view">
-  <div class="container">
+  <div id="container">
     <h2 id="title"></h2>
-    <img id="image" />
   </div>
 
   <style>
     @import url('/main.css');
 
-    .container {
+    #container {
       height: 100%;
       padding: 10px;
 
@@ -111,12 +108,19 @@
       display: grid;
     }
 
-    #title {
-      font-weight: bold;
+    #container.image {
+      color: #fff;
+      text-shadow: 0 0 10px black;
+      background-size: cover;
+      background-position: center;
     }
 
-    #image {
-      width: 100%;
+    #container.image #title {
+      vertical-align: baseline;
+    }
+
+    #title {
+      font-weight: bold;
     }
   </style>
 </template>

@@ -22,9 +22,9 @@ export class Component<T extends Data, R extends Refs> extends HTMLElement {
 type Data = { [k: string]: unknown };
 type Refs = { [k: string]: unknown };
 
-type Constructor = new() => unknown;
+type Constructor = new(...args: any[]) => unknown;
 type ConstructorType<T extends Constructor> =
-  T extends (new() => infer U)
+  T extends (new(...args: any[]) => infer U)
   ? U extends Number ? number
     : U extends String ? string
     : U

@@ -1,5 +1,5 @@
 import { define } from './component.js';
-import { Reddit } from '../reddit.js';
+import { Reddit, ImagePost, LinkPost, SelfPost } from '../reddit.js';
 import CardView from './card-view.js';
 
 export default define({
@@ -16,14 +16,28 @@ export default define({
   },
   render: async (data, refs) => {
     const listing = await Reddit.get(data.name);
-    const posts = listing.data.children.map(p => p.data);
+    const posts = listing.data.children.map(p => {
+      switch(p.data.post_hint) {
+        case 'image':
+          return new ImagePost(p.data);
+        case 'hosted:video':
+        case 'rich:video':
+        case 'link':
+          return new LinkPost(p.data);
+        case 'self':
+        case undefined:
+          return new SelfPost(p.data);
+        default:
+          throw new Error('Unknown post type ' + p.data.post_hint);
+      }
+    });
 
     refs.title.innerHTML = 'r/' + data.name;
 
 
     const images = posts
       .map(p => {
-        if (p.post_hint === 'image') {
+        if (p instanceof ImagePost) {
           return p.url;
         } else {
           return '';
