@@ -27,6 +27,7 @@
       <header>
         <h2 id="title"></h2>
       </header>
+      <h3 id="preview-title"></h3>
     </section>
     <section id="details">
       <ol id="list">
@@ -45,22 +46,30 @@
     }
 
     #hero {
-      background-color: lightgray;
-      background-size: cover;
-      background-position: center;
-
       grid-row: 1 / span 2;
       grid-column: 1;
+
+      display: grid;
+      row-gap: 15px;
+      grid-auto-rows: max-content;
 
       padding: 15px;
 
       color: #fff;
       text-shadow: 0 0 10px black;
+
+      background-color: lightgray;
+      background-size: cover;
+      background-position: center;
     }
 
     #title {
       font-weight: bold;
-      font-size: x-large;
+      font-size: xx-large;
+    }
+
+    #preview-title {
+      font-weight: bold;
     }
 
     #details {

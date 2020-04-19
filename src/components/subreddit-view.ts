@@ -12,7 +12,8 @@ export default define({
     title: HTMLImageElement,
     list: HTMLOListElement,
     post: HTMLLIElement,
-    hero: HTMLElement
+    hero: HTMLElement,
+    'preview-title': HTMLHeadingElement
   },
   render: async (data, refs) => {
     const listing = await Reddit.get(data.name);
@@ -35,24 +36,18 @@ export default define({
     refs.title.innerHTML = 'r/' + data.name;
 
 
-    const images = posts
-      .map(p => {
-        if (p instanceof ImagePost) {
-          return p.url;
-        } else {
-          return '';
-        }
-      })
-      .filter(i => !!i);
+    const images = <ImagePost[]>posts
+      .filter(p => p instanceof ImagePost);
     let count = 0;
 
-    const showImage = () => {
-      refs.hero.style.backgroundImage = `url(${images[count++]})`;
+    const previewPost = () => {
+      refs['preview-title'].innerHTML = images[count].title;
+      refs.hero.style.backgroundImage = `url(${images[count++].url})`;
       if (count === images.length) { count = 0; }
     }
 
-    showImage();
-    // setInterval(() => showImage(), 5000);
+    previewPost();
+    // setInterval(() => previewPost(), 5000);
 
 
     refs.list.innerHTML = '';

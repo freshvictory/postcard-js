@@ -12,19 +12,24 @@ export default define({
     title: HTMLElement
   },
   render: async (data, refs) => {
-    if (data.post) {
-      refs.title.innerHTML = data.post.title;
+    if (!data.post) { return; }
 
-      refs.container.classList.add(
-        data.post instanceof ImagePost ? 'image'
-        : data.post instanceof LinkPost ? 'link'
-        : data.post instanceof SelfPost ? 'self'
-        : ''
-      );
+    refs.title.innerHTML = data.post.title;
 
-      if (data.post instanceof ImagePost) {
-        refs.container.style.backgroundImage = `url(${data.post.thumbnail}`;
-      }
+    refs.container.classList.add(
+      data.post instanceof ImagePost ? 'image'
+    : data.post instanceof LinkPost  ? 'link'
+    : data.post instanceof SelfPost  ? 'self'
+    : ''
+    );
+
+    if (data.post instanceof ImagePost) {
+      refs.container.style.backgroundImage = `url(${data.post.thumbnail})`;
     }
+
+
+    refs.container.addEventListener('touchmove', () => {
+
+    })
   }
 });
