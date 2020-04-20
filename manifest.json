@@ -1,0 +1,9 @@
+{
+  "short_name": "Postcard",
+  "name": "Postcard",
+  "description": "A content-first Reddit client.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000",
+  "theme_color": "#000"
+}

@@ -1,6 +1,7 @@
 import { define } from './component.js';
 import { Reddit, ImagePost, LinkPost, SelfPost } from '../reddit.js';
 import CardView from './card-view.js';
+import { onDrag } from '../events.js';
 
 export default define({
   id: 'subreddit-view',
@@ -9,7 +10,9 @@ export default define({
     name: { type: String, default: 'Title' }
   },
   refs: {
+    container: HTMLElement,
     title: HTMLImageElement,
+    details: HTMLElement,
     list: HTMLOListElement,
     post: HTMLLIElement,
     hero: HTMLElement,
@@ -62,5 +65,57 @@ export default define({
 
       refs.list.appendChild(postListElement);
     }
+
+
+    onDrag(refs.hero, 'y', 20, {
+      start: () => {
+        refs.container.classList.add('dragging');
+      },
+      drag: (y, diff) => {
+        diff = Math.max(0, diff);
+        refs.container.style.transform = `translate3d(0, ${diff}px, 0)`;
+      },
+      end: (y, diff) => {
+        refs.container.style.transform = '';
+        refs.container.classList.remove('dragging');
+        if (diff > 0) {
+          refs.container.classList.add('dragged');
+        } else {
+          refs.container.classList.remove('dragged');
+        }
+      }
+    });
+
+
+    const easeOut =
+      (t: number, b: number, c: number, d: number) => {
+      return -c * (t/=d)*(t-2) + b;
+    }
+
+    onDrag(refs.details, 'y', 5, {
+      start: () => {
+        refs.details.classList.remove('dragged');
+        refs.details.classList.add('dragging');
+      },
+      drag: (y, diff) => {
+        // const diff = Math.max(0, y);
+        
+        const clamped = easeOut(
+          -diff, 1, 2.2, window.innerHeight
+        );
+        console.log(clamped, y)
+        refs.details.style.transform =
+          `scale(${clamped})`;
+      },
+      end: (y, diff) => {
+        refs.details.style.transform = '';
+        refs.details.classList.remove('dragging');
+        if (diff < -20) {
+          refs.details.classList.add('dragged');
+        } else {
+          refs.details.classList.remove('dragged');
+        }
+      }
+    });
   }
 });

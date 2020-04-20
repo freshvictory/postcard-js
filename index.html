@@ -2,7 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
 
   <link rel="stylesheet" href="main.css">
 
@@ -40,9 +51,34 @@
     @import url('/main.css');
 
     #container {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+
       display: grid;
-      height: 100vh;
+      height: 100%;
       grid-template-rows: 12fr 1fr 9fr;
+
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+      transition: transform 300ms ease-out;
+    }
+
+    #container.dragging {
+      transition: none;
+    }
+
+    #container.dragged {
+      transform: translate3d(0, calc(100% - 60px), 0);
+    }
+
+    #container.dragged #hero,
+    #container.dragging #hero {
+      border-top-left-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+      padding-top: 15px;
     }
 
     #hero {
@@ -54,6 +90,7 @@
       grid-auto-rows: max-content;
 
       padding: 15px;
+      padding-top: max(15px, env(safe-area-inset-top));
 
       color: #fff;
       text-shadow: 0 0 10px black;
@@ -73,10 +110,25 @@
     }
 
     #details {
+      position: relative;
       overflow-x: auto;
+      touch-action: pan-x;
 
       grid-row: 2 / span 2;
       grid-column: 1;
+
+      will-change: transform;
+      transform: scale(1);
+      transform-origin: bottom;
+      transition: transform 300ms ease-out;
+    }
+
+    #details.dragging {
+      transition: none;
+    }
+
+    #details.dragged {
+      transform: scale(2.22);
     }
 
     #list {
@@ -85,12 +137,13 @@
       grid-auto-flow: column;
       column-gap: 2px;
       padding: 0 2px;
+      height: 100%;
     }
     
     #list li {
       display: block;
       height: 100%;
-      height: calc(45vh);
+      /* height: calc(45vh); */
       width: calc(45vw);
     }
   </style>

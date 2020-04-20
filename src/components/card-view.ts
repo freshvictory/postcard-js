@@ -26,10 +26,5 @@ export default define({
     if (data.post instanceof ImagePost) {
       refs.container.style.backgroundImage = `url(${data.post.thumbnail})`;
     }
-
-
-    refs.container.addEventListener('touchmove', () => {
-
-    })
   }
 });
