@@ -103,7 +103,6 @@ export default define({
         const clamped = easeOut(
           -diff, 1, 2.2, window.innerHeight
         );
-        console.log(clamped, y)
         refs.details.style.transform =
           `scale(${clamped})`;
       },
