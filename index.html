@@ -17,7 +17,7 @@
 
   <link rel="stylesheet" href="shared.css">
 
-  <title>Document</title>
+  <title>Postcard</title>
 </head>
 <style>
   body {
@@ -34,6 +34,7 @@
       sans-serif;
 
     height: 100vh;
+    overflow: hidden;
     background-color: var(--c-backdrop);
     -webkit-tap-highlight-color: rgba(0,0,0,0);
   }
@@ -151,7 +152,6 @@
 
     #details {
       position: relative;
-      overflow-x: auto;
       touch-action: pan-x;
 
       grid-row: 2 / span 2;
@@ -168,23 +168,32 @@
     }
 
     #details.dragged {
-      transform: scale(2.22);
+      grid-row: 1 / end;
     }
 
     #list {
       list-style: none;
       display: grid;
       grid-auto-flow: column;
+      grid-auto-columns: 45vw;
       column-gap: 2px;
       padding: 0 2px;
       height: 100%;
+      width: 100vw;
+      overflow-x: auto;
     }
     
     #list li {
       display: block;
       height: 100%;
-      /* height: calc(45vh); */
-      width: calc(45vw);
+      scroll-snap-align: start;
+    }
+
+    #details.dragged #list {
+      grid-auto-columns: 100vw;
+      column-gap: 0;
+      padding: 0;
+      scroll-snap-type: x mandatory;
     }
   </style>
 </template>
@@ -203,7 +212,6 @@
     #container {
       height: 100%;
       padding: 10px;
-      padding-bottom: max(10px, env(safe-area-inset-top));
 
       background-color: var(--c-background);
       border-radius: var(--border-radius);
@@ -224,6 +232,40 @@
 
     #title {
       font-weight: bold;
+    }
+  </style>
+</template>
+
+
+<!-- Image Card Template -->
+
+<template id="image-card-view">
+  <div id="container">
+    <h2 id="title"></h2>
+  </div>
+
+  <style>
+    @import url('/shared.css');
+
+    #container {
+      height: 100%;
+      padding: 10px;
+      padding-bottom: max(10px, env(safe-area-inset-bottom));
+
+      background-color: var(--c-background);
+      border-radius: var(--border-radius);
+
+      display: grid;
+
+      color: #fff;
+      text-shadow: 0 0 10px black;
+      background-size: cover;
+      background-position: center;
+    }
+
+    #title {
+      font-weight: bold;
+      align-self: flex-end;
     }
   </style>
 </template>

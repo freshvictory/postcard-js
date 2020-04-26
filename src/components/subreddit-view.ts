@@ -1,6 +1,6 @@
 import { define } from './component.js';
 import { Reddit, ImagePost, LinkPost, SelfPost } from '../reddit.js';
-import CardView from './card-view.js';
+import { CardView, ImageCardView } from './card-view.js';
 import { onDrag } from '../events.js';
 
 export default define({
@@ -54,8 +54,9 @@ export default define({
 
 
     refs.list.innerHTML = '';
+    const cards: CardView[] = [];
     for (const post of posts) {
-      const card = new CardView();
+      const card = post instanceof ImagePost ? new ImageCardView() : new CardView();
       card.data.post = post;
 
       const postListElement = refs.post.cloneNode(true) as HTMLLIElement;
@@ -64,6 +65,8 @@ export default define({
       postListElement.appendChild(card);
 
       refs.list.appendChild(postListElement);
+
+      cards.push(card);
     }
 
 
@@ -92,29 +95,35 @@ export default define({
       return -c * (t/=d)*(t-2) + b;
     }
 
-    onDrag(refs.details, 'y', 5, {
-      start: () => {
-        refs.details.classList.remove('dragged');
-        refs.details.classList.add('dragging');
-      },
-      drag: (y, diff) => {
-        // const diff = Math.max(0, y);
-        
-        const clamped = easeOut(
-          -diff, 1, 2.2, window.innerHeight
-        );
-        refs.details.style.transform =
-          `scale(${clamped})`;
-      },
-      end: (y, diff) => {
-        refs.details.style.transform = '';
-        refs.details.classList.remove('dragging');
-        if (diff < -20) {
-          refs.details.classList.add('dragged');
-        } else {
-          refs.details.classList.remove('dragged');
-        }
-      }
+    refs.details.addEventListener('click', () => {
+      refs.details.classList.add('dragged');
     });
+    // onDrag(refs.details, 'y', 5, {
+      // start: () => {
+        // refs.details.classList.remove('dragged');
+        // refs.details.classList.add('dragging');
+      // },
+      // drag: (y, diff) => {
+        // // const diff = Math.max(0, y);
+        // 
+        // const clamped = easeOut(
+          // -diff, 1, 2.2, window.innerHeight
+        // );
+        // refs.details.style.transform =
+          // `scale(${clamped})`;
+      // },
+      // end: (y, diff) => {
+        // refs.details.style.transform = '';
+        // refs.details.classList.remove('dragging');
+        // if (diff < -20) {
+          // refs.details.classList.add('dragged');
+          // for (const card of cards) {
+            // card.data.full = true;
+          // }
+        // } else {
+          // refs.details.classList.remove('dragged');
+        // }
+      // }
+    // });
   }
 });

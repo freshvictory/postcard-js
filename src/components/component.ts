@@ -23,10 +23,11 @@ type Data = { [k: string]: unknown };
 type Refs = { [k: string]: unknown };
 
 type Constructor = new(...args: any[]) => unknown;
-type ConstructorType<T extends Constructor> =
+export type ConstructorType<T extends Constructor> =
   T extends (new(...args: any[]) => infer U)
   ? U extends Number ? number
     : U extends String ? string
+    : U extends Boolean ? boolean
     : U
   : never;
 
@@ -118,12 +119,20 @@ function buildElementClass<
 
       this.data = new Proxy(this._data, {
         get: (obj, prop: string) => {
-          return this.getAttribute(prop) || obj[prop];
+          return typeof obj[prop] === 'boolean'
+            ? this.hasAttribute(prop)
+            : this.getAttribute(prop) || obj[prop];
         },
         set: (obj, prop: keyof T, value) => {
           obj[prop] = value;
           if (options.attributes.indexOf(prop) !== -1) {
-            this.setAttribute(prop as string, value);
+            if (typeof obj[prop] === 'boolean') {
+              this[obj[prop] ? 'setAttribute' : 'removeAttribute'](
+                prop as string, ''
+              );
+            } else {
+              this.setAttribute(prop as string, value);
+            }
           }
 
           return true;
@@ -144,6 +153,11 @@ function buildElementClass<
     
     connectedCallback() {
       options.render?.(this.data, this.refs);
+    }
+
+
+    attributeChangedCallback(name: string) {
+      // noop, for now
     }
   };
 
