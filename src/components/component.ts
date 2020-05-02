@@ -98,26 +98,10 @@ function buildElementClass<
     }
 
 
-    private _data: Mapped<T>;
-
-
     constructor() {
       super(options.id);
 
-      this._data = <any>{};
-
-      for (const data in this._data) {
-        this._data[data] = <any>undefined;
-        const option = options.data[data];
-        if (typeof option === 'object') {
-          if ('default' in option) {
-            this._data[data] =
-              (option as ConstructorWithDefault<new () => any>).default;
-          }
-        }
-      }
-
-      this.data = new Proxy(this._data, {
+      this.data = new Proxy({} as Mapped<T>, {
         get: (obj, prop: string) => {
           return typeof obj[prop] === 'boolean'
             ? this.hasAttribute(prop)
@@ -138,6 +122,20 @@ function buildElementClass<
           return true;
         }
       });
+
+      for (const data in options.data) {
+        const option = options.data[data];
+        if (typeof option === 'object') {
+          if ('default' in option) {
+            this.data[data] =
+              (option as ConstructorWithDefault<new () => any>).default;
+          } else {
+            this.data[data] = <any>undefined;
+          }
+        } else {
+          this.data[data] = <any>undefined;
+        }
+      }
 
 
       this.refs = <any>{};      
