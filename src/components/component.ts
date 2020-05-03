@@ -155,7 +155,7 @@ function buildElementClass<
 
 
     attributeChangedCallback(name: string) {
-      // noop, for now
+      options.render?.(this.data, this.refs);
     }
   };
 

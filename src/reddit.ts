@@ -7,7 +7,7 @@ export class Reddit {
 
 
   public static async get(subreddit: string): Promise<SubredditResponse> {
-    return Lego as any;
+    return Lego;
 
     const response = await fetch(Reddit.url(subreddit));
     if (response.status === 200) {
@@ -21,15 +21,19 @@ export class Reddit {
 
 export class Post {
   public readonly id: string;
-  public readonly title: string; 
+  public readonly title: string;
   public readonly author: string;
-  public readonly createdUtc: number;
+  public readonly createdUtc: Date;
+  public readonly comments: number;
+  public readonly score: number;
 
   constructor(post: PostResponse) {
     this.id = post.id;
     this.title = post.title;
     this.author = post.author;
-    this.createdUtc = post.created_utc;
+    this.createdUtc = new Date(post.created_utc * 1000);
+    this.comments = post.num_comments;
+    this.score = post.score;
   }
 }
 
@@ -74,11 +78,11 @@ type Listing = {
 }
 
 type PostHint = undefined
-| 'link'
-| 'image'
-| 'rich:video'
-| 'hosted:video'
-| 'self';
+  | 'link'
+  | 'image'
+  | 'rich:video'
+  | 'hosted:video'
+  | 'self';
 
 type PostResponse = {
   readonly id: string;
@@ -86,6 +90,8 @@ type PostResponse = {
   readonly author: string;
   readonly created_utc: number;
   readonly subreddit: string;
+  readonly num_comments: number;
+  readonly score: number;
 
   readonly post_hint: PostHint;
 

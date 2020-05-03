@@ -53,6 +53,17 @@ export default define({
     // setInterval(() => previewPost(), 5000);
 
 
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const card = entry.target as CardView;
+        if (entry.isIntersecting) {
+          card.data.visible = true;
+        } else if (card.data.visible) {
+          card.data.visible = false;
+        }
+      })
+    }, { threshold: 0.25 });
+
     refs.list.innerHTML = '';
     const cards: CardView[] = [];
     for (const post of posts) {
@@ -67,6 +78,7 @@ export default define({
       refs.list.appendChild(postListElement);
 
       cards.push(card);
+      observer.observe(card);
     }
 
 
@@ -97,6 +109,9 @@ export default define({
 
     refs.details.addEventListener('click', () => {
       refs.details.classList.add('dragged');
+      for (const card of cards) {
+        card.data.full = true;
+      }
     });
     // onDrag(refs.details, 'y', 5, {
       // start: () => {

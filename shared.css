@@ -2,13 +2,19 @@
   box-sizing: border-box;
 }
 
-body, h1, h2, h3, h4, h5, li, ul, ol {
+body, h1, h2, h3, h4, h5, li, ul, ol, button {
   margin: 0;
   padding: 0;
   font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
+  color: inherit;
   border: 0;
   box-shadow: 0;
+  background: none;
 }
 
+button {
+  cursor: pointer;
+  user-select: none;
+}

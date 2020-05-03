@@ -181,6 +181,7 @@
       height: 100%;
       width: 100vw;
       overflow-x: auto;
+      overflow-y: hidden;
     }
     
     #list li {
@@ -241,7 +242,24 @@
 
 <template id="image-card-view">
   <div id="container">
-    <h2 id="title"></h2>
+    <div class="image-container">
+      <img id="image" />
+    </div>
+    <div class="info">
+      <h2 id="title"></h2>
+      <span class="details">
+        <span id="score"></span>
+        <span class="separator">•</span>
+        <span id="author"></span>
+        <span class="separator">•</span>
+        <time id="time"></time>
+      </span>
+      <span class="actions">
+        <button id="save">save</button>
+        <span class="separator">•</span>
+        <button id="comments">comments</button>
+      </span>
+    </div>
   </div>
 
   <style>
@@ -249,7 +267,7 @@
 
     #container {
       height: 100%;
-      padding: 10px;
+      width: 100%;
       padding-bottom: max(10px, env(safe-area-inset-bottom));
 
       background-color: var(--c-background);
@@ -259,13 +277,92 @@
 
       color: #fff;
       text-shadow: 0 0 10px black;
+      background-color: #000;
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
+
+      overflow: hidden;
+    }
+
+    #container.full {
+      padding: 0;
+    }
+
+    #container.inspect {
+      background-size: contain;
+    }
+
+    .image-container {
+      height: 100%;
+      width: 100%;
+
+      display: flex;
+      overflow: hidden;
+
+      grid-row: 1;
+      grid-column: 1;
+    }
+
+    #image {
+      height: 100%;
+      width: 100%;
+      align-self: center;
+      justify-self: center;
+      object-fit: cover;
+    }
+
+    #container.inspect #image {
+      height: auto;
+      width: 100%;
+    }
+
+    .info {
+      align-self: flex-end;
+      transform: translateY(100%);
+      will-change: transform;
+
+      grid-row: 1;
+      grid-column: 1;
+    }
+
+    #container.full .info {
+      padding: 10px;
+      padding-top: 70px;
+      transform: translateY(0);
+      transition: transform 300ms;
+      background: linear-gradient(to top, #000000AA, #00000000);
+    }
+
+    #container.inspect .info {
+      transform: translateY(100%);
     }
 
     #title {
+      padding: 10px;
       font-weight: bold;
-      align-self: flex-end;
+      transform: translateY(-100%);
+    }
+
+    #container.full #title {
+      padding: 0;
+      transform: translateY(0);
+    }
+
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 5px 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 10px 0;
+    }
+
+    .separator {
+      padding: 0 0.3em;
     }
   </style>
 </template>
